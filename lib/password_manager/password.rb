@@ -23,7 +23,7 @@ module PasswordManager
         @options[:max_length],
         @options[:mix_case],
         @options[:special_chars]
-      ) until new_password != @password
+      ).split("").shuffle.join until new_password != @password
       @password = new_password
     end
   end
