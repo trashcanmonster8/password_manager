@@ -11,13 +11,19 @@ module PasswordManager
 
     attr_reader :password, :options
 
-    def initialize(**opts)
+    def initialize(password = nil, **opts)
+      @password = password
       @options = DEFAULT_OPTS.merge(opts)
     end
 
     def update
       new_password = @password
-      new_password = Faker::Internet.password until new_password != @password
+      new_password = Faker::Internet.password(
+        @options[:min_length],
+        @options[:max_length],
+        @options[:mix_case],
+        @options[:special_chars]
+      ) until new_password != @password
       @password = new_password
     end
   end

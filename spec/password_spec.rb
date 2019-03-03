@@ -11,10 +11,18 @@ RSpec.describe PasswordManager::Password do
                                    })
   }
 
-  it 'creates new passwords' do
+  it '#update implements Faker::Internet#passwords' do
     creds = described_class.new
-    old_password = creds.password
+    expect(Faker::Internet).to receive(:password).with(
+      *PasswordManager::Password::DEFAULT_OPTS.values
+    ).and_return('test')
     creds.update
-    expect(creds.password).not_to eq old_password
+  end
+
+  it '#update creates new passwords' do
+    creds = described_class.new('password')
+    allow(Faker::Internet).to receive(:password).and_return('password', 'test')
+    creds.update
+    expect(creds.password).not_to eq 'password'
   end
 end
