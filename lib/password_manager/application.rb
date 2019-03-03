@@ -3,10 +3,16 @@ require 'password_manager/password'
 module PasswordManager
   class Application
     FILE = '~/.creds'.freeze
-    DEFAULT_CREDS = Password::DEFAULT_OPTS.dup.merge(
+    DEFAULT_CREDS = {
       username: nil,
-      password: nil
-    )
+      password: nil,
+      opts: {
+      min_length: 12,
+      max_length: 20,
+      mix_case: true,
+      special_chars: true
+      }
+    }
 
     def self.run
       load
@@ -34,7 +40,7 @@ module PasswordManager
     def self.application
       puts 'What account do you want to update?'
       account = gets.chomp
-      cred = @@creds[account] || {}
+      cred = @@creds[account] || DEFAULT_CREDS
       puts "Do you want to update the creds for #{account}"
       puts "Current creds\n   username: #{cred[:username]}\n   password: #{cred[:password]}\n"
       unless cred[:username]
@@ -43,17 +49,17 @@ module PasswordManager
       end
       puts "Update password ([nN] = no update, [rR] = new random, or type new password) #{account}"
       input = gets.chomp
-      cred[:password] = update?(input, cred[:password])
+      cred[:password] = update?(input, cred[:password], cred[:opts])
       puts "New password is: #{cred[:password]}"
       @@creds[account] = cred
     end
 
-    def self.update?(input, password)
+    def self.update?(input, password, opts)
       return password if input.downcase == 'n'
 
       return input unless input.downcase == 'r'
 
-      new_password = Password.new(password)
+      new_password = Password.new(password, opts)
       new_password.update
       new_password.password
     end
