@@ -10,11 +10,13 @@ module PasswordManager
 
     def self.run
       file = File.open(File.expand_path(FILE), 'w+')
-      @@creds = @@safe = YAML.safe_load(file.read) || {}
+      @@creds = safe = YAML.safe_load(file.read) || {}
       application
-      file.write(@@creds.to_yaml).close
+      file.write(@@creds.to_yaml)
     rescue
-      file.write(@@safe.to_yaml).close
+      file.write(safe.to_yaml)
+    ensure
+      file.close
     end
 
     def self.application
