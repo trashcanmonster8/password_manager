@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'password_manager/password'
 
 RSpec.describe PasswordManager::Password do

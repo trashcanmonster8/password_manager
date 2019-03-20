@@ -1,6 +1,11 @@
+# frozen_string_literal: true
+
 require 'faker'
 
 module PasswordManager
+  #
+  # Password object wraps Faker::Internet#password
+  #
   class Password
     DEFAULT_OPTS = {
       min_length: 12,
@@ -23,7 +28,7 @@ module PasswordManager
         @options[:max_length],
         @options[:mix_case],
         @options[:special_chars]
-      ).split("").shuffle.join until new_password != @password
+      ).split('').shuffle.join until new_password != @password
       @password = new_password
     end
   end

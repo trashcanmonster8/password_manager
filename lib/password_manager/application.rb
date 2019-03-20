@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 require 'password_manager/password'
 
 module PasswordManager
   class Application
-    FILE = '~/.creds'.freeze
+    FILE = '~/.creds'
     DEFAULT_CREDS = {
       username: nil,
       password: nil,
       opts: {
-      min_length: 12,
-      max_length: 20,
-      mix_case: true,
-      special_chars: true
+        min_length: 12,
+        max_length: 20,
+        mix_case: true,
+        special_chars: true
       }
-    }
+    }.freeze
 
     def self.run
       load
@@ -25,7 +27,7 @@ module PasswordManager
 
       file = File.open(File.expand_path(FILE), 'w+')
       file.write(@@creds.to_yaml)
-    rescue
+    rescue StandardError
       file&.write(@@safe.to_yaml)
     ensure
       file&.close
@@ -33,8 +35,8 @@ module PasswordManager
 
     def self.load
       path = File.expand_path(FILE)
-      text = File.exists?(path) ? File.read(path) : nil
-      @@creds = @@safe = YAML.load(text, [Symbol]) || {}
+      text = File.exist?(path) ? File.read(path) : nil
+      @@creds = @@safe = YAML.safe_load(text, [Symbol]) || {}
     end
 
     def self.application
@@ -55,9 +57,9 @@ module PasswordManager
     end
 
     def self.update?(input, password, opts)
-      return password if input.downcase == 'n'
+      return password if input.casecmp('n').zero?
 
-      return input unless input.downcase == 'r'
+      return input unless input.casecmp('r').zero?
 
       new_password = Password.new(password, opts)
       new_password.update

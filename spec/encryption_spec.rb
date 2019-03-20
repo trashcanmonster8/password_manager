@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe PasswordManager::AESCrypt do
   describe 'encrypt' do
     let(:password) { 'woohoosecret' }
