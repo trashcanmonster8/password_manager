@@ -8,7 +8,7 @@ module PasswordManager
   # Encryption using AES-256-CBC
   # Key generated using a password with OpenSSL:KDF#pbkdf2_hmac
   #
-  module AESCrypt
+  module Encryption
     CIPHER_TYPE = 'AES-256-CBC'
     SALT = "VgJyUZY3/Eu7u1gO0u4QIw==\n"
     KDF_OPTS = {
