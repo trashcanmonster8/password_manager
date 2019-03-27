@@ -3,28 +3,32 @@
 require 'password_manager/password'
 
 RSpec.describe PasswordManager::Password do
-  it {
-    is_expected.to have_attributes(password: nil,
-                                   options: {
-                                     max_length: 20,
-                                     min_length: 12,
-                                     mix_case: true,
-                                     special_chars: true
-                                   })
-  }
+  context 'default' do
+    subject { described_class.new }
 
-  it '#update implements Faker::Internet#passwords' do
-    creds = described_class.new
-    expect(Faker::Internet).to receive(:password).with(
-      *PasswordManager::Password::DEFAULT_OPTS.values
-    ).and_return('test')
-    creds.update
+    it '#update creates new passwords' do
+      new_password = subject.update('password')
+      expect(new_password).not_to eq 'password'
+      expect(new_password.length).to be_between(12, 20)
+      expect(new_password).to match(/[A-Za-z!@#$%^&*(),.?":{}|<>]+/)
+    end
   end
 
-  it '#update creates new passwords' do
-    creds = described_class.new('password')
-    allow(Faker::Internet).to receive(:password).and_return('password', 'test')
-    creds.update
-    expect(creds.password).not_to eq 'password'
+  context 'different options' do
+    OPTION = {
+      min_length: 2,
+      max_length: 5,
+      mix_case: false,
+      special_chars: false
+    }.freeze
+    subject { described_class.new(OPTION) }
+
+    it '#update implements Faker::Internet#passwords' do
+      new_password = subject.update('password')
+      expect(new_password).not_to eq 'password'
+      expect(new_password.length).to be_between(2, 5)
+      expect(new_password).to match(/[a-z]+/)
+      expect(new_password).not_to match(/[A-Z!@#$%^&*(),.?":{}|<>]+/)
+    end
   end
 end
