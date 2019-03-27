@@ -14,22 +14,19 @@ module PasswordManager
       special_chars: true
     }.freeze
 
-    attr_reader :password, :options
-
-    def initialize(password = nil, **opts)
-      @password = password
-      @options = DEFAULT_OPTS.merge(opts)
+    def initialize(**opts)
+      @options = DEFAULT_OPTS.dup.merge(opts)
     end
 
-    def update
-      new_password = @password
+    def update(password)
+      new_password = password
       new_password = Faker::Internet.password(
         @options[:min_length],
         @options[:max_length],
         @options[:mix_case],
         @options[:special_chars]
-      ).split('').shuffle.join until new_password != @password
-      @password = new_password
+      ).split('').shuffle.join until new_password != password
+      new_password
     end
   end
 end
