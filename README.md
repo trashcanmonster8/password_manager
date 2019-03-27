@@ -1,5 +1,7 @@
 # PasswordManager
 
+[![Build Status](https://travis-ci.org/trashcanmonster8/password_manager.svg?branch=master)](https://travis-ci.org/trashcanmonster8/password_manager)
+
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/password_manager`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 TODO: Delete this and the text above, and describe your gem
