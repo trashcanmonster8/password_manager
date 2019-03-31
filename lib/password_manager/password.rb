@@ -18,7 +18,7 @@ module PasswordManager
       @options = DEFAULT_OPTS.dup.merge(opts)
     end
 
-    def update(password)
+    def update(password = '')
       new_password = password
       new_password = Faker::Internet.password(
         @options[:min_length],
