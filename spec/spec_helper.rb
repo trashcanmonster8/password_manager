@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
-require 'password_manager'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
