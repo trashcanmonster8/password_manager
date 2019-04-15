@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+file_name = File.dirname(__FILE__) + '/../lib'
+$LOAD_PATH.unshift(file_name) unless $LOAD_PATH.include?(file_name)
+
 require 'bundler/setup'
 
 RSpec.configure do |config|
