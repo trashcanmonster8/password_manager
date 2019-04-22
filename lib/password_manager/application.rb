@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
 require 'password_manager/constants'
+require 'base64'
+require 'securerandom'
 require 'thor'
+require 'yaml'
 
 module PasswordManager
+  #
+  # CLI class
+  #
   class Application < Thor
     include Constants
 
@@ -14,12 +20,13 @@ module PasswordManager
 
     desc 'password', 'Set password'
     def password(password)
-      File.open(CONFIGURATION, File::CREAT).write(
-        {
-          salt: SecureRandom.base64,
-          password: Base64.strict_encode64(password)
-        }.to_yaml
-      )
+      File.open(File.expand_path(CONFIGURATION),
+                File::CREAT | File::WRONLY | File::EXCL).write(
+                  {
+                    salt: SecureRandom.base64(16),
+                    password: Base64.strict_encode64(password)
+                  }.to_yaml
+                )
     end
   end
 end
