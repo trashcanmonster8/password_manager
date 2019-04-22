@@ -11,9 +11,19 @@ module PasswordManager
     end
 
     def load
-      data = YAML.load(File.open(@absolute_location, File::RDONLY))
+      data = YAML.safe_load(File.open(@absolute_location, File::RDONLY))
       @password = data['password']
       @salt = data['salt']
+    end
+
+    def save(password, salt)
+      File.open(@absolute_location,
+                File::CREAT | File::WRONLY | File::EXCL) do |file|
+        file.puts({
+          'password' => password,
+          'salt' => salt
+        }.to_yaml)
+      end
     end
 
     def to_s
