@@ -11,7 +11,8 @@ module PasswordManager
       special_chars: true
     }.freeze
 
-    attr_reader :username, :password
+    attr_accessor :username
+    attr_reader :password
 
     def initialize(username = nil, password = nil, **opts)
       @username = username
@@ -19,7 +20,7 @@ module PasswordManager
       @options = DEFAULT_OPTS.merge(opts)
     end
 
-    def update
+    def update(username = nil)
       new_password = @password.dup
       new_password = Faker::Internet.password(
         @options[:min_length],

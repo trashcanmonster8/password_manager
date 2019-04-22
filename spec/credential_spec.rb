@@ -11,6 +11,8 @@ RSpec.describe PasswordManager::Credential do
       )
     }
 
+    it{ is_expected.to respond_to(:username=) }
+
     it '#update implements Faker::Internet#passwords' do
       expect(Faker::Internet).to receive(:password).with(
         *PasswordManager::Credential::DEFAULT_OPTS.values
