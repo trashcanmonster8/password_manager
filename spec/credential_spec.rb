@@ -11,7 +11,7 @@ RSpec.describe PasswordManager::Credential do
       )
     }
 
-    it{ is_expected.to respond_to(:username=) }
+    it { is_expected.to respond_to(:username=) }
 
     it '#update implements Faker::Internet#passwords' do
       expect(Faker::Internet).to receive(:password).with(
@@ -20,6 +20,15 @@ RSpec.describe PasswordManager::Credential do
       subject.update
     end
 
+    it '#update creates new passwords' do
+      allow(Faker::Internet).to receive(:password)
+        .and_return('password', 'test')
+      subject.update
+      expect(subject.password).not_to eq 'password'
+    end
+  end
+
+  context described_class.new('user', 'password') do
     it '#update creates new passwords' do
       allow(Faker::Internet).to receive(:password)
         .and_return('password', 'test')
