@@ -4,6 +4,4 @@ Metrics/BlockLength:
     - 'test/**/*'
     - '*.gemspec'
 Style/Documentation:
-  Exclude:
-    - 'spec/**/*'
-    - 'test/**/*'
+  Enabled: false
