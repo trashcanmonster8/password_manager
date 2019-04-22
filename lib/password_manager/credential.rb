@@ -3,10 +3,7 @@
 require 'faker'
 
 module PasswordManager
-  #
-  # Password object wraps Faker::Internet#password
-  #
-  class Password
+  class Credential
     DEFAULT_OPTS = {
       min_length: 12,
       max_length: 20,
@@ -14,15 +11,16 @@ module PasswordManager
       special_chars: true
     }.freeze
 
-    attr_reader :password, :options
+    attr_reader :username, :password
 
-    def initialize(password = nil, **opts)
+    def initialize(username = nil, password = nil, **opts)
+      @username = username
       @password = password
       @options = DEFAULT_OPTS.merge(opts)
     end
 
     def update
-      new_password = @password
+      new_password = @password.dup
       new_password = Faker::Internet.password(
         @options[:min_length],
         @options[:max_length],
@@ -30,6 +28,10 @@ module PasswordManager
         @options[:special_chars]
       ).split('').shuffle.join until new_password != @password
       @password = new_password
+    end
+
+    def to_s
+      "#{@username}:#{@password}"
     end
   end
 end
